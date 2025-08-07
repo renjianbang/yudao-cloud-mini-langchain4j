@@ -12,6 +12,14 @@
 <!--        <module>yudao-module-system-api</module>-->
 <!--        <module>yudao-module-system-server</module>-->
         <module>langchain4j-01helloworld</module>
+        <module>langchain4j-02multi-model-together</module>
+        <module>langchain4j-03boot-integration</module>
+        <module>langchain4j-04low-high-api</module>
+        <module>langchain4j-05model-parameters</module>
+        <module>langchain4j-06chat-image</module>
+        <module>langchain4j-07chat-stream</module>
+        <module>langchain4j-08chat-memory</module>
+        <module>langchain4j-09chat-prompt</module>
     </modules>
     <artifactId>langchain4j-atguiguV5</artifactId>
     <packaging>pom</packaging>

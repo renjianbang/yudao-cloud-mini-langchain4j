@@ -29,7 +29,8 @@ public class MoonshotAiProperties {
     /**
      * 默认模型名称
      */
-    private String modelName = "moonshot-v1-8k";
+//    private String modelName = "moonshot-v1-8k";
+    private String modelName = "kimi-k2-0711-preview";
     
     /**
      * 请求超时时间（秒）

@@ -1,8 +1,8 @@
 package com.atguigu.study.controller;
 
-import dev.langchain4j.model.chat.ChatModel;
-import jakarta.annotation.Resource;
+import dev.langchain4j.model.chat.ChatLanguageModel;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,9 +24,9 @@ public class HelloLangChain4JController {
      * - ANTHROPIC_API_KEY: MoonshotAI API密钥
      * - ANTHROPIC_BASE_URL: MoonshotAI API基础URL
      */
-    @Resource
+    @Autowired
     @Qualifier("moonshotAiChatModel")
-    private ChatModel chatModel;
+    private ChatLanguageModel chatModel;
 
     /**
      * Hello World 接口
@@ -40,7 +40,7 @@ public class HelloLangChain4JController {
         try {
             log.info("收到用户问题: {}", question);
 
-            String result = chatModel.chat(question);
+            String result = chatModel.generate(question);
 
             log.info("AI回复: {}", result);
 

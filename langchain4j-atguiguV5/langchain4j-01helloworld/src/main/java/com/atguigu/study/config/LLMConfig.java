@@ -1,6 +1,6 @@
 package com.atguigu.study.config;
 
-import dev.langchain4j.model.chat.ChatModel;
+import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class LLMConfig {
      */
     @Bean
     @Primary
-    public ChatModel moonshotAiChatModel() {
+    public ChatLanguageModel moonshotAiChatModel() {
         // 验证配置
         moonshotAiProperties.validate();
 
