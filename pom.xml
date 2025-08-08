@@ -17,6 +17,7 @@
         <module>yudao-module-system</module>
         <module>yudao-module-infra</module>
         <module>langchain4j-atguiguV5</module>
+        <module>SpringBoot3-new-features</module>
         <!--        <module>yudao-module-member</module>-->
 <!--        <module>yudao-module-bpm</module>-->
 <!--        <module>yudao-module-pay</module>-->
