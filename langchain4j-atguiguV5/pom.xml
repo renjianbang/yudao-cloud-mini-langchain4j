@@ -2,15 +2,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>cn.iocoder.cloud</groupId>
         <artifactId>yudao</artifactId>
-        <version>${revision}</version>
+        <version>2025.08-SNAPSHOT</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>langchain4j-atguiguV5</artifactId>
+    <packaging>pom</packaging>
+
     <modules>
-<!--        <module>yudao-module-system-api</module>-->
-<!--        <module>yudao-module-system-server</module>-->
         <module>langchain4j-01helloworld</module>
         <module>langchain4j-02multi-model-together</module>
         <module>langchain4j-03boot-integration</module>
@@ -19,10 +21,9 @@
         <module>langchain4j-06chat-image</module>
         <module>langchain4j-07chat-stream</module>
         <module>langchain4j-08chat-memory</module>
+        <module>langchain4j-08reactive-stream</module>
         <module>langchain4j-09chat-prompt</module>
     </modules>
-    <artifactId>langchain4j-atguiguV5</artifactId>
-    <packaging>pom</packaging>
 
     <name>${project.artifactId}</name>
     <description>

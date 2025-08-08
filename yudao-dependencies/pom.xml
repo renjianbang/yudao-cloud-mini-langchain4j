@@ -51,6 +51,10 @@
         <podam.version>8.0.2.RELEASE</podam.version>
         <jedis-mock.version>1.1.4</jedis-mock.version>
         <mockito-inline.version>5.2.0</mockito-inline.version>
+        <!-- Reactive 响应式编程相关 -->
+        <reactor.version>3.6.0</reactor.version>
+        <reactive-streams.version>1.0.4</reactive-streams.version>
+        <rxjava.version>3.1.8</rxjava.version>
         <!-- Bpm 工作流相关 -->
         <flowable.version>7.0.1</flowable.version>
         <!-- 工具类相关 -->
@@ -138,6 +142,47 @@
                 <artifactId>spring-ai-alibaba-starter</artifactId>
                 <version>${spring-ai-alibaba.version}</version>
             </dependency>
+
+            <!-- ========== Reactive Programming 响应式编程相关依赖 ========== -->
+            <!-- 暂时注释掉Reactor BOM，因为网络问题无法下载 -->
+            <!--
+            <dependency>
+                <groupId>io.projectreactor</groupId>
+                <artifactId>reactor-bom</artifactId>
+                <version>${reactor.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            -->
+
+            <!-- Project Reactor Core (直接指定版本) -->
+            <dependency>
+                <groupId>io.projectreactor</groupId>
+                <artifactId>reactor-core</artifactId>
+                <version>${reactor.version}</version>
+            </dependency>
+
+            <!-- Project Reactor Test -->
+            <dependency>
+                <groupId>io.projectreactor</groupId>
+                <artifactId>reactor-test</artifactId>
+                <version>${reactor.version}</version>
+            </dependency>
+
+            <!-- Reactive Streams API -->
+            <dependency>
+                <groupId>org.reactivestreams</groupId>
+                <artifactId>reactive-streams</artifactId>
+                <version>${reactive-streams.version}</version>
+            </dependency>
+
+            <!-- RxJava -->
+            <dependency>
+                <groupId>io.reactivex.rxjava3</groupId>
+                <artifactId>rxjava</artifactId>
+                <version>${rxjava.version}</version>
+            </dependency>
+
             <!--langchain4j的依赖清单，加载BOM后所有langchain4j版本号可以被统一管理起来
             https://docs.langchain4j.dev/get-started
             -->

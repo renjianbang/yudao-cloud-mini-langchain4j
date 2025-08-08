@@ -3,28 +3,15 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
-    <!-- 使用 Spring Boot 作为父项目，简化依赖管理 -->
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.0</version>
-        <relativePath/>
+        <groupId>cn.iocoder.cloud</groupId>
+        <artifactId>langchain4j-atguiguV5</artifactId>
+        <version>2025.08-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.atguigu.study</groupId>
     <artifactId>langchain4j-01helloworld</artifactId>
-    <version>1.0.0</version>
     <name>langchain4j-01helloworld入门案例</name>
     <description>LangChain4j + MoonshotAI 集成示例</description>
-
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <langchain4j.version>0.34.0</langchain4j.version>
-        <java.version>17</java.version>
-    </properties>
 
     <dependencies>
         <!-- Spring Boot Web Starter -->
@@ -44,14 +31,12 @@
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-open-ai</artifactId>
-            <version>${langchain4j.version}</version>
         </dependency>
 
         <!-- LangChain4j Core -->
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j</artifactId>
-            <version>${langchain4j.version}</version>
         </dependency>
 
         <!-- Lombok -->

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<toolchains>
+    <toolchain>
+        <type>jdk</type>
+        <provides>
+            <version>17</version>
+        </provides>
+        <configuration>
+            <jdkHome>D:\Environment\JDK17</jdkHome>
+        </configuration>
+    </toolchain>
+    <toolchain>
+        <type>jdk</type>
+        <provides>
+            <version>1.8</version>
+        </provides>
+        <configuration>
+            <jdkHome>D:\DevelopTools\Java\Jdk 1.8</jdkHome>
+        </configuration>
+    </toolchain>
+</toolchains>

@@ -65,6 +65,27 @@
     <build>
         <pluginManagement>
             <plugins>
+                <!-- maven-toolchains-plugin 插件，用于指定JDK版本 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-toolchains-plugin</artifactId>
+                    <version>3.1.0</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>toolchain</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <toolchains>
+                            <jdk>
+                                <version>${java.version}</version>
+                            </jdk>
+                        </toolchains>
+                    </configuration>
+                </plugin>
+
                 <!-- maven-surefire-plugin 插件，用于运行单元测试。 -->
                 <!-- 注意，需要使用 3.0.X+，因为要支持 Junit 5 版本 -->
                 <plugin>
@@ -173,5 +194,7 @@
             </releases>
         </repository>
     </repositories>
+
+
 
 </project>

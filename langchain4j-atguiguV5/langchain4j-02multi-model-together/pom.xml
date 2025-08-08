@@ -12,11 +12,7 @@
     <artifactId>langchain4j-02multi-model-together</artifactId>
     <name>langchain4j-02multi-model-together多模型共存</name>
 
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+
 
 
     <dependencies>
