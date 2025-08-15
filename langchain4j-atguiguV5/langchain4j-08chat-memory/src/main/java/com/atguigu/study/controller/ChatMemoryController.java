@@ -20,8 +20,7 @@ import java.util.Arrays;
  */
 @RestController
 @Slf4j
-public class ChatMemoryController
-{
+public class ChatMemoryController {
     @Resource(name = "chat")
     private ChatAssistant chatAssistant;
 
@@ -32,21 +31,20 @@ public class ChatMemoryController
     private ChatMemoryAssistant chatTokenWindowChatMemory;
 
     /**
-    * @Description: v1,没有记忆缓存功能
-    * @Auther: zzyybs@126.com
+     * @Description: v1, 没有记忆缓存功能
+     * @Auther: zzyybs@126.com
      * http://localhost:9008/chatmemory/test1
-    */
+     */
     @GetMapping(value = "/chatmemory/test1")
-    public String chat()
-    {
+    public String chat() {
 
         String answer01 = chatAssistant.chat("你好，我的名字叫张三");
-        System.out.println("answer01返回结果："+answer01);
+        System.out.println("answer01返回结果：" + answer01);
 
         String answer02 = chatAssistant.chat("我的名字是什么");
-        System.out.println("answer02返回结果："+answer02);
+        System.out.println("answer02返回结果：" + answer02);
 
-        return "success : "+ DateUtil.now()+"<br> \n\n answer01: "+answer01+"<br> \n\n answer02: "+answer02;
+        return "success : " + DateUtil.now() + "<br> \n\n answer01: " + answer01 + "<br> \n\n answer02: " + answer02;
     }
 
     /**
@@ -54,18 +52,17 @@ public class ChatMemoryController
      * @Auther: zzyybs@126.com
      */
     @GetMapping(value = "/chatmemory/test2")
-    public String chatMessageWindowChatMemory()
-    {
+    public String chatMessageWindowChatMemory() {
         chatMessageWindowChatMemory.chatWithChatMemory(1L, "你好！我的名字是Java.");
         String answer01 = chatMessageWindowChatMemory.chatWithChatMemory(1L, "我的名字是什么");
-        System.out.println("answer01返回结果："+answer01);
+        System.out.println("answer01返回结果：" + answer01);
 
         chatMessageWindowChatMemory.chatWithChatMemory(3L, "你好！我的名字是C++");
         String answer02 = chatMessageWindowChatMemory.chatWithChatMemory(3L, "我的名字是什么");
-        System.out.println("answer02返回结果："+answer02);
+        System.out.println("answer02返回结果：" + answer02);
 
         return "chatMessageWindowChatMemory success : "
-                + DateUtil.now()+"<br> \n\n answer01: "+answer01+"<br> \n\n answer02: "+answer02;
+                + DateUtil.now() + "<br> \n\n answer01: " + answer01 + "<br> \n\n answer02: " + answer02;
 
     }
 
@@ -74,17 +71,16 @@ public class ChatMemoryController
      * @Auther: zzyybs@126.com
      */
     @GetMapping(value = "/chatmemory/test3")
-    public String chatTokenWindowChatMemory()
-    {
+    public String chatTokenWindowChatMemory() {
         chatTokenWindowChatMemory.chatWithChatMemory(1L, "你好！我的名字是mysql");
         String answer01 = chatTokenWindowChatMemory.chatWithChatMemory(1L, "我的名字是什么");
-        System.out.println("answer01返回结果："+answer01);
+        System.out.println("answer01返回结果：" + answer01);
 
         chatTokenWindowChatMemory.chatWithChatMemory(3L, "你好！我的名字是oracle");
         String answer02 = chatTokenWindowChatMemory.chatWithChatMemory(3L, "我的名字是什么");
-        System.out.println("answer02返回结果："+answer02);
+        System.out.println("answer02返回结果：" + answer02);
 
         return "chatTokenWindowChatMemory success : "
-                + DateUtil.now()+"<br> \n\n answer01: "+answer01+"<br> \n\n answer02: "+answer02;
+                + DateUtil.now() + "<br> \n\n answer01: " + answer01 + "<br> \n\n answer02: " + answer02;
     }
 }

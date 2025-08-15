@@ -8,8 +8,7 @@ import dev.langchain4j.service.UserMessage;
  * @Date 2025-05-30 19:22
  * @Description: TODO
  */
-public interface ChatMemoryAssistant
-{
+public interface ChatMemoryAssistant {
 
     /**
      * 聊天带记忆缓存功能

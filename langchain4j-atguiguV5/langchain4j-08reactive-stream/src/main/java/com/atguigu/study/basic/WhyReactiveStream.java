@@ -54,15 +54,16 @@ public class WhyReactiveStream {
         start = System.currentTimeMillis();
         
         CountDownLatch latch = new CountDownLatch(1);
-        
+
+        long finalStart = start;
         Flux.just("任务1", "任务2", "任务3")
-            .flatMap(task -> 
-                Flux.fromCallable(() -> blockingOperation(task, 1000))
-                    .subscribeOn(Schedulers.boundedElastic())
-            )
+//            .flatMap(task ->
+//                Flux.fromCallable(() -> blockingOperation(task, 1000))
+//                    .subscribeOn(Schedulers.boundedElastic())
+//            )
             .collectList()
             .subscribe(results -> {
-                long reactiveTime = System.currentTimeMillis() - start;
+                long reactiveTime = System.currentTimeMillis() - finalStart;
                 log.info("响应式方式完成，耗时: {}ms, 结果: {}", reactiveTime, results);
                 latch.countDown();
             });

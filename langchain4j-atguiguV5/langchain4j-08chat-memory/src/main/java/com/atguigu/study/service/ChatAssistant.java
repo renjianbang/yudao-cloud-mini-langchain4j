@@ -8,10 +8,9 @@ import dev.langchain4j.service.UserMessage;
  * @Date 2025-05-30 18:59
  * @Description: TODO
  */
-public interface ChatAssistant
-{
+public interface ChatAssistant {
     /**
-    * @Description: 普通聊天对话，不带记忆缓存功能
-    */
+     * @Description: 普通聊天对话，不带记忆缓存功能
+     */
     String chat(String prompt);
 }

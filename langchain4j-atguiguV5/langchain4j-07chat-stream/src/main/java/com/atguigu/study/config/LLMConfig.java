@@ -18,16 +18,14 @@ import java.util.List;
  * @Description: 知识出处，https://docs.langchain4j.dev/tutorials/response-streaming
  */
 @Configuration
-public class LLMConfig
-{
+public class LLMConfig {
 
     /**
-    * @Description: 普通对话接口 ChatModel
-    * @Auther: zzyybs@126.com
-    */
+     * @Description: 普通对话接口 ChatModel
+     * @Auther: zzyybs@126.com
+     */
     @Bean(name = "qwen")
-    public ChatModel chatModelQwen()
-    {
+    public ChatModel chatModelQwen() {
         return OpenAiChatModel.builder()
                 .apiKey(System.getenv("aliQwen-api"))
                 .modelName("qwen-plus")
@@ -37,20 +35,20 @@ public class LLMConfig
 
 
     /**
-    * @Description: 流式对话接口 StreamingChatModel
-    * @Auther: zzyybs@126.com
-    */
+     * @Description: 流式对话接口 StreamingChatModel
+     * @Auther: zzyybs@126.com
+     */
     @Bean
-    public StreamingChatModel streamingChatModel(){
+    public StreamingChatModel streamingChatModel() {
         return OpenAiStreamingChatModel.builder()
-                    .apiKey(System.getenv("aliQwen-api"))
-                    .modelName("qwen-plus")
-                    .baseUrl("https://dashscope.aliyuncs.com/compatible-mode/v1")
+                .apiKey(System.getenv("aliQwen-api"))
+                .modelName("qwen-plus")
+                .baseUrl("https://dashscope.aliyuncs.com/compatible-mode/v1")
                 .build();
     }
 
     @Bean
-    public ChatAssistant chatAssistant(StreamingChatModel streamingChatModel){
+    public ChatAssistant chatAssistant(StreamingChatModel streamingChatModel) {
         return AiServices.create(ChatAssistant.class, streamingChatModel);
     }
 }
