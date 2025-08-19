@@ -29,13 +29,26 @@ spring:
     gateway:
       # 路由配置项，对应 RouteDefinition 数组
       routes:
+        - id: demo-admin-api # 路由的编号
+          uri: grayLb://demo-server
+          predicates: # 断言，作为路由的匹配条件，对应 RouteDefinition 数组
+            - Path=/admin-api/demo/**
+          filters:
+            - RewritePath=/admin-api/demo/v3/api-docs, /v3/api-docs # 配置，保证转发到 /v2/api-docs
+        - id: demo-app-api # 路由的编号
+          uri: grayLb://demo-server
+          predicates: # 断言，作为路由的匹配条件，对应 RouteDefinition 数组
+            - Path=/app-api/demo/**
+          filters:
+            - RewritePath=/app-api/demo/v3/api-docs, /v3/api-docs
+
         ## system-server 服务
         - id: system-admin-api # 路由的编号
           uri: grayLb://system-server
           predicates: # 断言，作为路由的匹配条件，对应 RouteDefinition 数组
             - Path=/admin-api/system/**
           filters:
-              - RewritePath=/admin-api/system/v3/api-docs, /v3/api-docs # 配置，保证转发到 /v3/api-docs
+              - RewritePath=/admin-api/system/v3/api-docs, /v3/api-docs
         - id: system-app-api # 路由的编号
           uri: grayLb://system-server
           predicates: # 断言，作为路由的匹配条件，对应 RouteDefinition 数组
@@ -188,8 +201,18 @@ spring:
             - Path=/admin-api/iot/**
           filters:
             - RewritePath=/admin-api/iot/v3/api-docs, /v3/api-docs # 配置，保证转发到 /v3/api-docs
+      
       x-forwarded:
         prefix-enabled: false # 避免 Swagger 重复带上额外的 /admin-api/system 前缀
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*" # 暴露所有端点
+  endpoint:
+    health:
+      show-details: always # 显示健康检查详细信息
 
 server:
   port: 48080
@@ -203,6 +226,10 @@ knife4j:
   gateway:
     enabled: true
     routes:
+      - name: demo-server
+        service-name: demo-server
+        url: /admin-api/demo/v3/api-docs
+
       - name: system-server
         service-name: system-server
         url: /admin-api/system/v3/api-docs
