@@ -6,7 +6,7 @@
     <parent>
         <groupId>cn.iocoder.cloud</groupId>
         <artifactId>langchain4j-atguiguV5</artifactId>
-        <version>2025.08-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
     <artifactId>langchain4j-05model-parameters</artifactId>
 
@@ -29,6 +29,20 @@
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j</artifactId>
+        </dependency>
+        <!--langchain4j-core-->
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-core</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-open-ai-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-spring-boot-starter</artifactId>
         </dependency>
         <!--lombok-->
         <dependency>
@@ -54,6 +68,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>3.1.0</version>
             </plugin>
         </plugins>
     </build>

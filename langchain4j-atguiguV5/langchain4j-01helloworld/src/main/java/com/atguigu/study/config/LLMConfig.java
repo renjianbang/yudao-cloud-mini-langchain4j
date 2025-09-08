@@ -1,6 +1,6 @@
 package com.atguigu.study.config;
 
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,8 @@ public class LLMConfig {
      */
     @Bean
     @Primary
-    public ChatLanguageModel moonshotAiChatModel() {
+    //@Primary 注解用于标记某个 Bean 为“首选 Bean”。当 Spring 容器中存在多个同类型 Bean 时，自动注入（如 @Autowired）会优先选择带有 @Primary 的 Bean。这样可以避免因类型冲突导致的注入错误。
+    public ChatModel moonshotAiChatModel() {
         // 验证配置
         moonshotAiProperties.validate();
 
@@ -39,14 +40,33 @@ public class LLMConfig {
         log.info("Base URL: {}", moonshotAiProperties.getBaseUrl());
         log.info("Model Name: {}", moonshotAiProperties.getModelName());
 
+        // 使用建造者模式构建 OpenAiChatModel 实例
+        // 虽然名为 OpenAiChatModel，但由于 OpenAI 兼容协议的广泛采用，
+        // 可以用于连接多种大模型服务（如 MoonshotAI、通义千问、智谱AI等）
         return OpenAiChatModel.builder()
+                // 设置 API 密钥，用于身份验证和授权访问
+                // 从配置文件中读取，确保敏感信息不硬编码在代码中
                 .apiKey(moonshotAiProperties.getApiKey())
+                // 指定要使用的具体模型名称
+                // 例如: "moonshot-v1-8k", "gpt-3.5-turbo", "qwen-plus" 等
                 .modelName(moonshotAiProperties.getModelName())
+                // 设置 API 服务的基础 URL 地址
+                // 不同服务商有不同的端点，如 MoonshotAI: "https://api.moonshot.cn/v1"
                 .baseUrl(moonshotAiProperties.getBaseUrl())
+                // 配置网络请求超时时间，防止长时间等待
+                // 将秒数转换为 Duration 对象，建议设置为 30-120 秒
                 .timeout(Duration.ofSeconds(moonshotAiProperties.getTimeoutSeconds()))
+                // 设置失败重试次数，提高服务的可靠性
+                // 当网络波动或服务暂时不可用时，会自动重试指定次数
                 .maxRetries(moonshotAiProperties.getMaxRetries())
-                .logRequests(true)  // 启用请求日志
-                .logResponses(true) // 启用响应日志
+                // 启用请求日志记录，便于调试和监控
+                // 会记录发送给 AI 模型的完整请求内容（注意可能包含敏感信息）
+                .logRequests(true)
+                // 启用响应日志记录，便于分析 AI 模型的返回结果
+                // 会记录 AI 模型返回的完整响应内容，有助于问题排查
+                .logResponses(true)
+                // 构建并返回配置完成的 ChatModel 实例
+                // 该实例将被 Spring 容器管理，可在其他地方通过依赖注入使用
                 .build();
     }
 

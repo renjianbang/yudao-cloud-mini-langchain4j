@@ -6,7 +6,7 @@
     <parent>
         <groupId>cn.iocoder.cloud</groupId>
         <artifactId>yudao</artifactId>
-        <version>2025.08-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>langchain4j-atguiguV5</artifactId>
@@ -23,6 +23,9 @@
         <module>langchain4j-08chat-memory</module>
         <module>langchain4j-08reactive-stream</module>
         <module>langchain4j-09chat-prompt</module>
+        <module>langchain4j-10chat-persistence</module>
+        <module>langchain4j-13chat-rag01</module>
+        <module>langchain4j-12chat-embedding</module>
     </modules>
 
     <name>${project.artifactId}</name>

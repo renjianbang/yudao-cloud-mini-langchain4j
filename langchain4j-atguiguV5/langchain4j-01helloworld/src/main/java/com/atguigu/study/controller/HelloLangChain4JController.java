@@ -1,6 +1,6 @@
 package com.atguigu.study.controller;
+import dev.langchain4j.model.chat.ChatModel;
 
-import dev.langchain4j.model.chat.ChatLanguageModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,7 +26,7 @@ public class HelloLangChain4JController {
      */
     @Autowired
     @Qualifier("moonshotAiChatModel")
-    private ChatLanguageModel chatModel;
+    private ChatModel chatModel;
 
     /**
      * Hello World 接口
@@ -40,7 +40,7 @@ public class HelloLangChain4JController {
         try {
             log.info("收到用户问题: {}", question);
 
-            String result = chatModel.generate(question);
+            String result = chatModel.chat(question);
 
             log.info("AI回复: {}", result);
 

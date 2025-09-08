@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>cn.iocoder.cloud</groupId>
+        <artifactId>yudao-module-test</artifactId>
+        <version>${revision}</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>yudao-module-test-api</artifactId>
+    <packaging>jar</packaging>
+
+    <name>${project.artifactId}</name>
+    <description>test 模块的 API 定义，主要提供 Feign 接口和 DTO 定义</description>
+
+    <dependencies>
+        <!-- 通用工具 -->
+        <dependency>
+            <groupId>cn.iocoder.cloud</groupId>
+            <artifactId>yudao-common</artifactId>
+        </dependency>
+        <!-- Web 相关 -->
+        <dependency>
+            <groupId>cn.iocoder.cloud</groupId>
+            <artifactId>yudao-spring-boot-starter-web</artifactId>
+        </dependency>
+        
+        <!-- system 模块 API -->
+        <dependency>
+            <groupId>cn.iocoder.cloud</groupId>
+            <artifactId>yudao-module-system-api</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        
+        <!-- RPC 远程调用相关 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
+</project>

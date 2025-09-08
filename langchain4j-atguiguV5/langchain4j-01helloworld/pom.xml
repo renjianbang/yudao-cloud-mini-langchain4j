@@ -6,7 +6,7 @@
     <parent>
         <groupId>cn.iocoder.cloud</groupId>
         <artifactId>langchain4j-atguiguV5</artifactId>
-        <version>2025.08-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>langchain4j-01helloworld</artifactId>
@@ -31,14 +31,15 @@
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-open-ai</artifactId>
+            <version>1.0.1</version>
         </dependency>
 
         <!-- LangChain4j Core -->
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j</artifactId>
+            <version>1.0.1</version>
         </dependency>
-
         <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>

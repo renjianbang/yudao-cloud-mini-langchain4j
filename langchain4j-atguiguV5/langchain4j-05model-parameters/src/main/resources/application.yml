@@ -1,0 +1,24 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: langchain4j-model-parameters
+
+# OpenAI配置
+openai:
+  api:
+    key: your-openai-api-key-here
+    base-url: https://api.openai.com/v1
+    model: gpt-3.5-turbo
+    temperature: 0.7
+    max-tokens: 1000
+    timeout: 30s
+
+# 日志配置
+logging:
+  level:
+    com.atguigu.langchain4j: DEBUG
+    dev.langchain4j: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"

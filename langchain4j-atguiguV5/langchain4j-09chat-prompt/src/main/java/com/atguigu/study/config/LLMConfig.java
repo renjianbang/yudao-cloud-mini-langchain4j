@@ -13,15 +13,13 @@ import org.springframework.context.annotation.Configuration;
  * @Description: TODO
  */
 @Configuration
-public class LLMConfig
-{
+public class LLMConfig {
     @Bean
-    public ChatModel chatModel()
-    {
+    public ChatModel chatModel() {
         return OpenAiChatModel.builder()
-                .apiKey(System.getenv("aliQwen-api"))
-                .modelName("qwen-long")
-                .baseUrl("https://dashscope.aliyuncs.com/compatible-mode/v1")
+                .apiKey(System.getenv("ANTHROPIC_API_KEY"))
+                .modelName("moonshot-v1-8k")
+                .baseUrl("https://api.moonshot.cn/v1")
                 .build();
     }
 

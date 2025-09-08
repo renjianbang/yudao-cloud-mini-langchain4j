@@ -1,0 +1,56 @@
+spring:
+  application:
+    name: yudao-module-travel-server
+  profiles:
+    active: local
+
+  main:
+    allow-circular-references: true # 允许循环依赖，因为项目是三层架构，无法避免这个情况。
+    allow-bean-definition-overriding: true # 允许 Bean 覆盖，例如说 Feign 等会存在重复定义的服务
+
+  config:
+    import:
+      - optional:classpath:application-${spring.profiles.active}.yaml # 加载【本地】配置
+      - optional:nacos:${spring.application.name}-${spring.profiles.active}.yaml # 加载【Nacos】的配置
+
+
+
+
+--- #################### 定时任务相关配置 ####################
+xxl:
+  job:
+    enabled: false # 是否开启调度中心，默认为 true 开启
+
+--- #################### 服务保障相关配置 ####################
+
+# Lock4j 配置项
+lock4j:
+  acquire-timeout: 3000 # 获取分布式锁超时时间，默认为 3000 毫秒
+  expire: 30000 # 分布式锁的超时时间，默认为 30 毫秒
+
+# Resilience4j 配置项
+resilience4j:
+  ratelimiter:
+    instances:
+      backendA:
+        limit-for-period: 1 # 每个周期内允许的请求数量
+        limit-refresh-period: 60s # 刷新周期
+        timeout-duration: 5s # 请求超时时间
+
+--- #################### 芋道相关配置 ####################
+
+# 芋道配置项，设置当前项目所有自定义的配置
+yudao:
+  info:
+    version: 1.0.0
+    base-package: cn.iocoder.yudao.module.travel
+  web:
+    admin-ui:
+      url: http://dashboard.yudao.iocoder.cn # Admin 管理后台 UI 的地址
+  xss:
+    enable: false
+    exclude-urls: # 如下 url，仅仅是为了演示，去掉配置也没关系
+      - ${management.endpoints.web.base-path}/** # 不处理 Actuator 的请求
+  swagger:
+    title: 差旅系统模块
+    description: 提供国际机票订单管理、团组管理等差旅业务功能

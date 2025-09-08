@@ -16,8 +16,10 @@
         <!--  各种 module 拓展 -->
         <module>yudao-module-system</module>
         <module>yudao-module-infra</module>
+        <module>yudao-module-test</module>
+        <module>yudao-module-travel</module>
         <module>langchain4j-atguiguV5</module>
-        <module>SpringBoot3-new-features</module>
+        <!-- <module>SpringBoot3-new-features</module> -->
         <!--        <module>yudao-module-member</module>-->
 <!--        <module>yudao-module-bpm</module>-->
 <!--        <module>yudao-module-pay</module>-->

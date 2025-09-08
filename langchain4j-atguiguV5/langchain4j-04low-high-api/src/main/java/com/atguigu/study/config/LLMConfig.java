@@ -14,40 +14,35 @@ import org.springframework.context.annotation.Configuration;
  * @Description: 知识出处 https://docs.langchain4j.dev/get-started
  */
 @Configuration
-public class LLMConfig
-{
+public class LLMConfig {
     @Bean(name = "qwen")
-    public ChatModel chatModelQwen()
-    {
+    public ChatModel chatModelQwen() {
         return OpenAiChatModel.builder()
-                    .apiKey(System.getenv("aliQwen-api"))
-                    .modelName("qwen-plus")
-                    .baseUrl("https://dashscope.aliyuncs.com/compatible-mode/v1")
+                .apiKey(System.getenv("aliQwen-api"))
+                .modelName("qwen-plus")
+                .baseUrl("https://dashscope.aliyuncs.com/compatible-mode/v1")
                 .build();
     }
 
     /**
-    * @Description: 知识出处，https://api-docs.deepseek.com/zh-cn/
-    * @Auther: zzyybs@126.com
-    */
+     * @Description: 知识出处，https://api-docs.deepseek.com/zh-cn/
+     * @Auther: zzyybs@126.com
+     */
     @Bean(name = "deepseek")
-    public ChatModel chatModelDeepSeek()
-    {
+    public ChatModel chatModelDeepSeek() {
         return
                 OpenAiChatModel.builder()
                         .apiKey(System.getenv("deepseek-api"))
                         .modelName("deepseek-chat")
                         //.modelName("deepseek-reasoner")
                         .baseUrl("https://api.deepseek.com/v1")
-                .build();
+                        .build();
     }
-
 
 
     // High-Api https://docs.langchain4j.dev/tutorials/ai-services#simplest-ai-service
     @Bean
-    public ChatAssistant chatAssistant(@Qualifier("qwen") ChatModel chatModelQwen)
-    {
+    public ChatAssistant chatAssistant(@Qualifier("qwen") ChatModel chatModelQwen) {
         return AiServices.create(ChatAssistant.class, chatModelQwen);
     }
 }

@@ -9,10 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @Description: TODO
  */
 @SpringBootApplication
-public class BootIntegrationLangChain4JApp
-{
-    public static void main(String[] args)
-    {
-        SpringApplication.run(BootIntegrationLangChain4JApp.class,args);
+public class BootIntegrationLangChain4JApp {
+    public static void main(String[] args) {
+        SpringApplication.run(BootIntegrationLangChain4JApp.class, args);
     }
 }

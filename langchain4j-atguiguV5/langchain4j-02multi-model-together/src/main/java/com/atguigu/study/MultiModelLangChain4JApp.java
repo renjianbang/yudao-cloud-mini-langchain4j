@@ -9,10 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @Description: TODO
  */
 @SpringBootApplication
-public class MultiModelLangChain4JApp
-{
-    public static void main(String[] args)
-    {
-        SpringApplication.run(MultiModelLangChain4JApp.class,args);
+public class MultiModelLangChain4JApp {
+    public static void main(String[] args) {
+        SpringApplication.run(MultiModelLangChain4JApp.class, args);
     }
 }

@@ -13,35 +13,36 @@ import org.springframework.stereotype.Component;
  */
 @Data
 @Component
+//@ConfigurationProperties(prefix = "moonshot") 的作用是将配置文件（如 application.properties 或 application.yml）中以 moonshot 开头的属性自动绑定到该类的字段上
 @ConfigurationProperties(prefix = "moonshot")
 public class MoonshotAiProperties {
-    
+
     /**
      * API密钥，从环境变量 ANTHROPIC_API_KEY 读取
      */
     private String apiKey;
-    
+
     /**
      * API基础URL，从环境变量 ANTHROPIC_BASE_URL 读取
      */
     private String baseUrl;
-    
+
     /**
      * 默认模型名称
      */
 //    private String modelName = "moonshot-v1-8k";
     private String modelName = "kimi-k2-0711-preview";
-    
+
     /**
      * 请求超时时间（秒）
      */
     private Integer timeoutSeconds = 60;
-    
+
     /**
      * 最大重试次数
      */
     private Integer maxRetries = 3;
-    
+
     /**
      * 获取API密钥，优先从环境变量读取
      */
@@ -51,7 +52,7 @@ public class MoonshotAiProperties {
         }
         return System.getenv("ANTHROPIC_API_KEY");
     }
-    
+
     /**
      * 获取基础URL，优先从环境变量读取
      */
@@ -61,7 +62,7 @@ public class MoonshotAiProperties {
         }
         return System.getenv("ANTHROPIC_BASE_URL");
     }
-    
+
     /**
      * 验证配置是否完整
      */

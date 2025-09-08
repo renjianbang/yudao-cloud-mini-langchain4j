@@ -1,0 +1,98 @@
+version: "3.8"
+
+networks:
+  my_network:
+    driver: bridge
+
+services:
+  mysql8:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "123456"
+      MYSQL_DATABASE: "nacos"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./mysql-schema.sql:/docker-entrypoint-initdb.d/nacos-schema.sql
+    # 添加初始化命令修改认证插件
+    command: 
+      - --character-set-server=utf8mb4 
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-authentication-plugin=mysql_native_password  # 关键修改
+    networks:
+      - my_network
+    healthcheck:  # 添加健康检查
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p123456"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+
+  nacos:
+    image: nacos/nacos-server:v2.3.0
+    ports:
+      - "8848:8848"
+      - "9848:9848"
+      - "9849:9849"
+    environment:
+      - MODE=standalone
+      - PREFER_HOST_MODE=hostname
+      - SPRING_DATASOURCE_PLATFORM=mysql  # 明确指定数据源类型
+      - MYSQL_SERVICE_HOST=mysql8
+      - MYSQL_SERVICE_PORT=3306
+      - MYSQL_SERVICE_USER=root
+      - MYSQL_SERVICE_PASSWORD=123456
+      - MYSQL_SERVICE_DB_NAME=nacos
+      # 添加连接参数解决公钥问题
+      - MYSQL_SERVICE_DB_PARAM=allowPublicKeyRetrieval=true&useSSL=false  # 移除双引号
+    depends_on:
+      mysql8:
+        condition: service_healthy  # 仅在MySQL健康后启动
+    networks:
+      - my_network
+    restart: on-failure  # 启动失败时自动重试
+
+  redis6:
+    image: redis:6.0
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - my_network
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.3
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - xpack.security.enabled=false   # 如果不需要安全认证
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    networks:
+      - my_network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"   # 应用连接端口
+      - "15672:15672" # 管理控制台端口
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - my_network
+volumes:
+  mysql_data:
+  redis_data:
+  es_data:
+  rabbitmq_data:

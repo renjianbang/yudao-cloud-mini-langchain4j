@@ -1,6 +1,6 @@
 package com.atguigu.study.config;
 
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +28,8 @@ public class MoonshotAiConfigTest {
     private MoonshotAiProperties moonshotAiProperties;
     
     @Autowired
-    private ChatLanguageModel chatModel;
-    
+    private ChatModel chatModel;
+
     @Test
     public void testMoonshotAiPropertiesConfiguration() {
         log.info("测试 MoonshotAI 属性配置...");
@@ -89,8 +89,8 @@ public class MoonshotAiConfigTest {
             log.info("开始实际API调用测试...");
             
             String question = "你好，请简单介绍一下你自己";
-            String response = chatModel.generate(question);
-            
+            String response = chatModel.chat(question);
+
             assertNotNull(response);
             assertFalse(response.trim().isEmpty());
             

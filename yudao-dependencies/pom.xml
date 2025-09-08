@@ -37,6 +37,8 @@
         <taos.version>3.3.3</taos.version>
         <!-- 消息队列 -->
         <rocketmq-spring.version>2.3.2</rocketmq-spring.version>
+        <!-- Elasticsearch -->
+        <elasticsearch.version>8.11.4</elasticsearch.version>
         <!-- RPC 相关 -->
         <!-- Config 配置中心相关 -->
         <!-- Job 定时任务相关 -->
