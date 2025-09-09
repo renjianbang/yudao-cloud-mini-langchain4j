@@ -1,6 +1,9 @@
 -- 差旅系统数据库初始化脚本
 
 -- 删除已存在的表（如果存在）
+DROP TABLE IF EXISTS `studio_refund_operation_log`;
+DROP TABLE IF EXISTS `studio_refund_application`;
+DROP TABLE IF EXISTS `studio_refund_policy`;
 DROP TABLE IF EXISTS `studio_rebooking_operation_log`;
 DROP TABLE IF EXISTS `studio_rebooking_application`;
 DROP TABLE IF EXISTS `studio_order_fees`;
@@ -212,3 +215,117 @@ CREATE TABLE `studio_rebooking_operation_log` (
   PRIMARY KEY (`id`),
   KEY `idx_rebooking_id` (`rebooking_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='改签操作日志表';
+
+-- 创建退票申请表
+CREATE TABLE `studio_refund_application` (
+    `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `order_id` bigint NOT NULL COMMENT '关联的订单ID',
+    `order_no` varchar(50) NOT NULL COMMENT '订单号',
+    `segment_id` bigint NOT NULL COMMENT '航段ID',
+    `passenger_id` bigint NOT NULL COMMENT '乘客ID',
+    `passenger_name` varchar(50) NOT NULL COMMENT '乘客姓名',
+    
+    -- 航班信息
+    `flight_no` varchar(10) NOT NULL COMMENT '航班号',
+    `airline_code` varchar(3) NOT NULL COMMENT '航司代码',
+    `airline_name` varchar(100) COMMENT '航司名称',
+    `departure_airport_code` varchar(3) NOT NULL COMMENT '出发机场代码',
+    `departure_airport_name` varchar(100) COMMENT '出发机场名称',
+    `arrival_airport_code` varchar(3) NOT NULL COMMENT '到达机场代码',
+    `arrival_airport_name` varchar(100) COMMENT '到达机场名称',
+    `departure_time` datetime NOT NULL COMMENT '出发时间',
+    `arrival_time` datetime NOT NULL COMMENT '到达时间',
+    `cabin_class` varchar(2) NOT NULL COMMENT '舱位等级',
+    
+    -- 费用信息
+    `original_ticket_price` decimal(10,2) NOT NULL COMMENT '原票价',
+    `refund_fee` decimal(10,2) NOT NULL COMMENT '退票费',
+    `refund_amount` decimal(10,2) NOT NULL COMMENT '退票金额',
+    `actual_refund_amount` decimal(10,2) NOT NULL COMMENT '实际退款金额',
+    `currency` varchar(3) DEFAULT 'CNY' COMMENT '币种',
+    
+    -- 业务信息
+    `reason` text NOT NULL COMMENT '退票原因',
+    `refund_type` tinyint NOT NULL COMMENT '退票类型 (1: 自愿退票, 2: 非自愿退票)',
+    `status` tinyint DEFAULT 10 COMMENT '状态 (10: 待审核, 20: 已通过, 30: 已拒绝, 40: 已完成, 50: 已取消)',
+    
+    -- 审核信息
+    `approver` varchar(50) COMMENT '审核人',
+    `approve_time` datetime COMMENT '审核时间',
+    `approve_remarks` text COMMENT '审核备注',
+    
+    -- 系统信息
+    `remarks` text COMMENT '申请备注',
+    `creator` varchar(64) DEFAULT '' COMMENT '创建者',
+    `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updater` varchar(64) DEFAULT '' COMMENT '更新者',
+    `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
+    `tenant_id` bigint NOT NULL DEFAULT 0 COMMENT '租户编号',
+    
+    PRIMARY KEY (`id`),
+    INDEX `idx_order_id` (`order_id`),
+    INDEX `idx_order_no` (`order_no`),
+    INDEX `idx_passenger_id` (`passenger_id`),
+    INDEX `idx_flight_no` (`flight_no`),
+    INDEX `idx_status` (`status`),
+    INDEX `idx_refund_type` (`refund_type`),
+    INDEX `idx_create_time` (`create_time`),
+    INDEX `idx_departure_time` (`departure_time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='退票申请表';
+
+-- 创建退票操作日志表
+CREATE TABLE `studio_refund_operation_log` (
+    `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `refund_id` bigint NOT NULL COMMENT '退票申请ID',
+    `operation_type` varchar(20) NOT NULL COMMENT '操作类型 (CREATE, APPROVE, REJECT, EXECUTE, CANCEL)',
+    `operation_desc` varchar(200) COMMENT '操作描述',
+    `content_before` JSON COMMENT '操作前的数据快照',
+    `content_after` JSON COMMENT '操作后的数据快照',
+    `operator_id` bigint COMMENT '操作人ID',
+    `operator_name` varchar(50) COMMENT '操作人姓名',
+    `operator_ip` varchar(50) COMMENT '操作IP',
+    `remark` text COMMENT '操作备注',
+    `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '操作时间',
+    
+    PRIMARY KEY (`id`),
+    INDEX `idx_refund_id` (`refund_id`),
+    INDEX `idx_operation_type` (`operation_type`),
+    INDEX `idx_create_time` (`create_time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='退票操作日志表';
+
+-- 创建退票政策配置表
+CREATE TABLE `studio_refund_policy` (
+    `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `airline_code` varchar(3) NOT NULL COMMENT '航司代码',
+    `cabin_class` varchar(2) NOT NULL COMMENT '舱位等级',
+    `refund_type` tinyint NOT NULL COMMENT '退票类型 (1: 自愿, 2: 非自愿)',
+    `fee_rate` decimal(5,4) NOT NULL COMMENT '退票费率 (0.0000-1.0000)',
+    `min_fee` decimal(10,2) DEFAULT 0 COMMENT '最低退票费',
+    `max_fee` decimal(10,2) COMMENT '最高退票费',
+    `time_limit_hours` int DEFAULT 24 COMMENT '起飞前时间限制(小时)',
+    `policy_desc` text COMMENT '政策描述',
+    `effective_date` date NOT NULL COMMENT '生效日期',
+    `expire_date` date COMMENT '失效日期',
+    `status` tinyint DEFAULT 1 COMMENT '状态 (0: 禁用, 1: 启用)',
+    `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uk_airline_cabin_type` (`airline_code`, `cabin_class`, `refund_type`, `effective_date`),
+    INDEX `idx_airline_code` (`airline_code`),
+    INDEX `idx_effective_date` (`effective_date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='退票政策配置表';
+
+-- 插入默认退票政策
+INSERT INTO `studio_refund_policy` (`airline_code`, `cabin_class`, `refund_type`, `fee_rate`, `min_fee`, `time_limit_hours`, `policy_desc`, `effective_date`) VALUES
+('CA', 'Y', 1, 0.2000, 50.00, 24, '中国国际航空经济舱自愿退票政策', '2025-01-01'),
+('CA', 'Y', 2, 0.1000, 20.00, 2, '中国国际航空经济舱非自愿退票政策', '2025-01-01'),
+('CA', 'C', 1, 0.1500, 100.00, 24, '中国国际航空商务舱自愿退票政策', '2025-01-01'),
+('CA', 'C', 2, 0.0500, 50.00, 2, '中国国际航空商务舱非自愿退票政策', '2025-01-01'),
+('MU', 'Y', 1, 0.2000, 50.00, 24, '中国东方航空经济舱自愿退票政策', '2025-01-01'),
+('MU', 'Y', 2, 0.1000, 20.00, 2, '中国东方航空经济舱非自愿退票政策', '2025-01-01'),
+('CZ', 'Y', 1, 0.2000, 50.00, 24, '中国南方航空经济舱自愿退票政策', '2025-01-01'),
+('CZ', 'Y', 2, 0.1000, 20.00, 2, '中国南方航空经济舱非自愿退票政策', '2025-01-01'),
+('MU', 'C', 1, 0.1500, 100.00, 24, '中国东方航空商务舱自愿退票政策', '2025-01-01'),
+('MU', 'C', 2, 0.0500, 50.00, 2, '中国东方航空商务舱非自愿退票政策', '2025-01-01');

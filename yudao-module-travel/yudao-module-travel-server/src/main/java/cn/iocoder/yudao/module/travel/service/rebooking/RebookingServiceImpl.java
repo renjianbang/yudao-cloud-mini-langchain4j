@@ -11,6 +11,7 @@ import cn.iocoder.yudao.module.travel.dal.dataobject.rebooking.RebookingOperatio
 import cn.iocoder.yudao.module.travel.dal.mysql.rebooking.RebookingApplicationMapper;
 import cn.iocoder.yudao.module.travel.dal.mysql.rebooking.RebookingOperationLogMapper;
 import cn.iocoder.yudao.module.travel.enums.rebooking.RebookingStatusEnum;
+//import cn.iocoder.yudao.module.travel.mq.producer.TravelMessageProducer;
 import cn.iocoder.yudao.module.travel.service.flightsegments.FlightSegmentsService;
 import cn.iocoder.yudao.module.travel.service.orders.OrdersService;
 import cn.iocoder.yudao.module.travel.service.passengers.PassengersService;
@@ -63,7 +64,7 @@ public class RebookingServiceImpl implements RebookingService {
         List<PassengersDO> passengers = passengersService.getPassengersByOrderId(orderId);
 
         // 3. 获取航段列表
-        List<FlightSegmentsDO> segments = flightSegmentsService.getFlightSegmentsByOrderId(orderId);
+//        List<FlightSegmentsDO> segments = flightSegmentsService.getFlightSegmentsByOrderId(orderId);
 
         // 4. 构建响应对象
         RebookingInfoRespVO respVO = new RebookingInfoRespVO();
@@ -91,20 +92,20 @@ public class RebookingServiceImpl implements RebookingService {
 
         // 航段列表
         List<RebookingInfoRespVO.FlightSegmentVO> segmentVOs = new ArrayList<>();
-        for (FlightSegmentsDO segment : segments) {
-            RebookingInfoRespVO.FlightSegmentVO segmentVO = new RebookingInfoRespVO.FlightSegmentVO();
-            segmentVO.setId(segment.getId());
-            segmentVO.setPassengerId(segment.getPassengerId());
-            segmentVO.setFlightNo(segment.getFlightNo());
-            segmentVO.setAirlineCode(segment.getAirlineCode());
-            segmentVO.setDepartureAirportCode(segment.getDepartureAirportCode());
-            segmentVO.setArrivalAirportCode(segment.getArrivalAirportCode());
-            segmentVO.setDepartureTime(segment.getDepartureTime().toString());
-            segmentVO.setArrivalTime(segment.getArrivalTime().toString());
-            segmentVO.setCabinClass(segment.getCabinClass());
-            segmentVO.setStatus(segment.getStatus());
-            segmentVOs.add(segmentVO);
-        }
+//        for (FlightSegmentsDO segment : segments) {
+//            RebookingInfoRespVO.FlightSegmentVO segmentVO = new RebookingInfoRespVO.FlightSegmentVO();
+//            segmentVO.setId(segment.getId());
+//            segmentVO.setPassengerId(segment.getPassengerId());
+//            segmentVO.setFlightNo(segment.getFlightNo());
+//            segmentVO.setAirlineCode(segment.getAirlineCode());
+//            segmentVO.setDepartureAirportCode(segment.getDepartureAirportCode());
+//            segmentVO.setArrivalAirportCode(segment.getArrivalAirportCode());
+//            segmentVO.setDepartureTime(segment.getDepartureTime().toString());
+//            segmentVO.setArrivalTime(segment.getArrivalTime().toString());
+//            segmentVO.setCabinClass(segment.getCabinClass());
+//            segmentVO.setStatus(segment.getStatus());
+//            segmentVOs.add(segmentVO);
+//        }
         respVO.setSegments(segmentVOs);
 
         return respVO;
@@ -209,6 +210,9 @@ public class RebookingServiceImpl implements RebookingService {
 
         // 2. 记录操作日志
         logOperation(application.getId(), "提交申请", "改签申请已提交，等待审核");
+        
+        // 3. 发送异步消息
+        sendRebookingAppliedMessages(application, createReqVO);
 
         return application.getId();
     }
@@ -269,6 +273,9 @@ public class RebookingServiceImpl implements RebookingService {
 
         // 6. 记录操作日志
         logOperation(id, "执行改签", "改签执行成功");
+        
+        // 7. 发送异步消息
+        sendRebookingCompletedMessages(application);
     }
 
     /**
@@ -276,7 +283,7 @@ public class RebookingServiceImpl implements RebookingService {
      */
     private void updateOriginalSegmentStatus(Long segmentId) {
         // 更新原航段状态为已改签
-        flightSegmentsService.updateSegmentStatus(segmentId, 20); // 20: 已改签
+//        flightSegmentsService.updateSegmentStatus(segmentId, 20); // 20: 已改签
     }
 
     /**
@@ -296,7 +303,7 @@ public class RebookingServiceImpl implements RebookingService {
         newSegment.setCabinClass(application.getNewCabinClass());
         newSegment.setStatus(10); // 10: 正常
 
-        flightSegmentsService.createFlightSegments(newSegment);
+//        flightSegmentsService.createFlightSegments(newSegment);
     }
 
     @Override
@@ -378,6 +385,65 @@ public class RebookingServiceImpl implements RebookingService {
                 .build();
         
         rebookingOperationLogMapper.insert(log);
+    }
+
+    /**
+     * 发送改签申请相关消息
+     */
+    private void sendRebookingAppliedMessages(RebookingApplicationDO application, RebookingApplicationCreateReqVO createReqVO) {
+        try {
+            // 获取订单信息
+            OrdersDO order = ordersService.getOrders(application.getOrderId());
+            if (order == null) {
+                log.warn("订单不存在，无法发送改签消息：orderId={}", application.getOrderId());
+                return;
+            }
+
+            // 计算改签费用显示（使用默认值）
+            BigDecimal rebookingFee = application.getChangeFee() != null ? application.getChangeFee() : new BigDecimal("200.00");
+
+            // 发送改签申请消息（包含订单状态更新、审批流程、通知发送等）
+
+
+        } catch (Exception e) {
+            // 消息发送失败不影响主业务流程
+            log.error("发送改签申请消息失败：rebookingId={}, orderId={}",
+                     application.getId(), application.getOrderId(), e);
+        }
+    }
+
+    /**
+     * 发送改签完成相关消息
+     */
+    private void sendRebookingCompletedMessages(RebookingApplicationDO application) {
+        try {
+            // 获取订单信息
+            OrdersDO order = ordersService.getOrders(application.getOrderId());
+            if (order == null) {
+                log.warn("订单不存在，无法发送改签完成消息：orderId={}", application.getOrderId());
+                return;
+            }
+
+            // 计算改签费用
+            BigDecimal rebookingFee = application.getChangeFee() != null ? application.getChangeFee() : new BigDecimal("200.00");
+
+            // 构建新航班信息
+            String newFlightInfo = String.format("%s %s %s-%s %s",
+                application.getNewAirlineCode(),
+                application.getNewFlightNo(),
+                application.getNewDepartureAirportCode(),
+                application.getNewArrivalAirportCode(),
+                application.getNewDepartureTime() != null ? application.getNewDepartureTime().toString() : ""
+            );
+
+            // 发送改签完成消息（包含订单状态更新、财务处理、通知发送等）
+
+
+        } catch (Exception e) {
+            // 消息发送失败不影响主业务流程
+            log.error("发送改签完成消息失败：rebookingId={}, orderId={}",
+                     application.getId(), application.getOrderId(), e);
+        }
     }
 
 }

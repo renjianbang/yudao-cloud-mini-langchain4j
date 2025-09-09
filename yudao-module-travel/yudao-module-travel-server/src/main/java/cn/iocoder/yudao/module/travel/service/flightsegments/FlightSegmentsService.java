@@ -59,28 +59,5 @@ public interface FlightSegmentsService {
      */
     PageResult<FlightSegmentsDO> getFlightSegmentsPage(FlightSegmentsPageReqVO pageReqVO);
 
-    /**
-     * 根据订单ID获取航段列表
-     *
-     * @param orderId 订单ID
-     * @return 航段列表
-     */
-    List<FlightSegmentsDO> getFlightSegmentsByOrderId(Long orderId);
-
-    /**
-     * 更新航段状态
-     *
-     * @param segmentId 航段ID
-     * @param status 状态
-     */
-    void updateSegmentStatus(Long segmentId, Integer status);
-
-    /**
-     * 创建航段
-     *
-     * @param segment 航段信息
-     * @return 航段ID
-     */
-    Long createFlightSegments(FlightSegmentsDO segment);
 
 }

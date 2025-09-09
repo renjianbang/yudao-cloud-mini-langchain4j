@@ -20,7 +20,7 @@ import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
 
 @Tag(name = "管理后台 - 改签管理")
 @RestController
-@RequestMapping("/admin-api/studio/rebooking")
+@RequestMapping("/studio/rebooking")
 @Validated
 @Slf4j
 public class RebookingController {

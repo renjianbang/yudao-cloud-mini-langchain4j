@@ -82,23 +82,6 @@ public class FlightSegmentsServiceImpl implements FlightSegmentsService {
         return flightSegmentsMapper.selectPage(pageReqVO);
     }
 
-    @Override
-    public List<FlightSegmentsDO> getFlightSegmentsByOrderId(Long orderId) {
-        return flightSegmentsMapper.selectList(FlightSegmentsDO::getOrderId, orderId);
-    }
 
-    @Override
-    public void updateSegmentStatus(Long segmentId, Integer status) {
-        FlightSegmentsDO updateObj = new FlightSegmentsDO();
-        updateObj.setId(segmentId);
-        updateObj.setStatus(status);
-        flightSegmentsMapper.updateById(updateObj);
-    }
-
-    @Override
-    public Long createFlightSegments(FlightSegmentsDO segment) {
-        flightSegmentsMapper.insert(segment);
-        return segment.getId();
-    }
 
 }

@@ -16,7 +16,7 @@
 ### 2.1 改签申请表 (rebooking_application)
 
 ```sql
-CREATE TABLE `rebooking_application` (
+CREATE TABLE `studio_rebooking_application` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
   `order_id` bigint(20) NOT NULL COMMENT '关联的订单ID',
   `original_segment_id` bigint(20) NOT NULL COMMENT '原航段ID',
@@ -53,7 +53,7 @@ CREATE TABLE `rebooking_application` (
 ### 2.2 改签操作日志表 (rebooking_operation_log)
 
 ```sql
-CREATE TABLE `rebooking_operation_log` (
+CREATE TABLE `studio_rebooking_operation_log` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
   `rebooking_id` bigint(20) NOT NULL COMMENT '改签申请ID',
   `operation_type` varchar(50) NOT NULL COMMENT '操作类型',
